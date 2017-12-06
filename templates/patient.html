@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html><head>
+<title>Devs on FHIR</title>
+
+<!-- Load c3.css -->
+<link href="static/c3/c3.min.css" rel="stylesheet">
+
+<!-- Load d3.js and c3.js -->
+<script src="static/d3/d3.v3.min.js" charset="utf-8"></script>
+<script src="static/c3/c3.min.js"></script>
+
+
+<script src="static/jquery/jquery-3.2.1.min.js"></script>
+<link rel="stylesheet" type="text/css" href="static/font-awesome/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="static/bootstrap/css/bootstrap.min.css">
+<style>
+header {
+  /*padding: 154px 0 100px;*/
+  padding: 77px 0 30px;
+}
+
+@media (min-width: 992px) {
+  header {
+    /*padding: 156px 0 100px;*/
+    padding: 78px 0 30px;
+  }
+}
+
+section {
+  padding: 30px 0;
+}
+
+#patient-profile {
+    color: #fff;
+    text-shadow: 4px 3px 0 #117888,9px 8px 0 rgba(0,0,0,0.15);
+    font-size: 5em;
+}
+
+.c3-axis-x-label{
+  font-size: 17px;
+}
+.c3-axis-y-label{
+  font-size: 12px;
+}
+.c3-event-rect{
+    fill:#ccc;
+}
+.c3-event-rect.c3-event-rect-0,.c3-event-rect.c3-event-rect-2{
+    fill:green;
+    fill-opacity: 0.08;
+}
+.c3-event-rect.c3-event-rect-1,.c3-event-rect.c3-event-rect-3{
+    fill:red;
+    fill-opacity: 0.08;
+}
+</style>
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+  <body id="page-top" class="fa-font-awesome">
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" id="mainNav">
+      <div class="container">
+        <a class="navbar-brand js-scroll-trigger" href="#page-top"><img src="static/images/icon.png" width="40px"/>   Devs On FHIR: Community Referral</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="#history"><i class="fa fa-history" aria-hidden="true"></i> Referral History</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="#programs"><i class="fa fa-th-list" aria-hidden="true"></i> Referral Programs</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <header class="bg-info text-white">
+      <div class="container">
+          <div class="row">
+            <div class="col-3 text-center">
+              <p><strong>{{name}}</strong></p>
+              <p><strong>Diagnosis:</strong> {{diagnosis}}</p>
+              <i class="fa fa-user-circle" aria-hidden="true" id="patient-profile"></i>
+            </div>
+            <div class="col-4">
+            <p><strong>Patient Information:</strong> </p>
+            <ul>
+            <li>Gender: {{gender}} </li>
+            <li>Age: {{age}} </li>
+            <li>Race: {{race}} </li>
+            <li>Marital Status: {{marital_status}} </li>
+            </ul>
+            </div>
+            <div class="col-5">
+            	<p><strong>Patient Record:</strong> </p>
+              <ul>
+              <li>A1C: {{a1c_reading}} </li>
+              <li>Blood Pressure: {{systolic_bp}}/{{diastolic_bp}} </li>
+              <li>BMI: {{bmi}} </li>
+              </ul>
+            </div>
+          </div>
+      </div>
+    </header>
+
+    <section id="history">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-12 mx-auto text-center">
+            <h3>Referral History </h3>
+              <table class="table  table-striped text-center" style="width: 100%">
+              <tr><th>Type</th><th>Referral Date</th><th>Provider Entity</th><th>Status</th></tr>
+              <tr><td>Nutrition</td><td>12/28/1983</td><td>Martha Healthy Eating Program</td><td>Complete</td></tr>
+              <tr><td>YMCA</td><td>11/12/1996</td><td>YMCA, Beverly Hills, CA</td><td>Did not enroll</td></tr>
+              </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="bg-light" id="programs">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-12 mx-auto text-center">
+            <h3>Referral Programs <button type="button" id="chart_all" class="btn btn-info btn-sm"><strong>View All</strong></button></h3>
+              <table class="table  table-striped text-center" style="width: 100%">
+              <tr><th></th><th>Provider Entity</th><th># Patients Referred</th><th>Acceptance Rate</th><th>Rejection Rate</th><th>Address</th></tr>
+                {% for p_item in programs %}
+                  {% for dict_item in a1c_data|to_obj %}
+                    {%- if p_item.program in dict_item %}
+              <tr><td><a href= {{refer_link}}&program={{p_item.program}} class="btn btn-info btn-sm refer-btn"><strong>Refer</strong></a></td><td><button type="button" id="{{p_item.program.lower()}}" class="btn btn-info btn-sm"><strong>{{p_item.program}}</strong></button></td><td>{{p_item.refer_count}}</td><td>{{p_item.accept_rate}}%</td><td>{{p_item.reject_rate}}%</td><td><font class="text-muted">{{p_item.address}}</font></td></tr>
+                      {% break %}
+                    {% endif %}
+                  {% endfor %}
+                {% endfor %}
+              </table>
+          </div>
+        </div>
+        <p><b>Statistics are based on population health data for {{marital_status_full.lower()}} {{race.lower()}} {{gender.lower()}}s, ages {{minage}}-{{maxage}}, with {{selected_condition.lower()}}</b></p>
+        <div class="row">
+          <div class="col-6 text-left">
+            <div id="a1c-chart"></div>
+          </div>
+          <div class="col-6">
+            <div id="bmi-chart"></div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-6 text-left">
+            <div id="sbp-chart"></div>
+          </div>
+          <div class="col-6">
+            <div id="dbp-chart"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-5 bg-dark">
+      <div class="container">
+        <p class="m-0 text-center text-white"><img src="static/images/icon.png" width="55px"/>  Devs on FHIR!</p>
+      </div>
+      <!-- /.container -->
+    </footer>
+
+    <script>
+      var a1cdata = { popdata:{{a1c_data|safe}} };
+      var bmidata = { popdata:{{bmi_data|safe}} };
+      var sbpdata = { popdata:{{sbp_data|safe}} };
+      var dbpdata = { popdata:{{dbp_data|safe}} };
+
+      function generate_chart(id, data, title, limit, unit){
+        var xAxisData = ['Before: <'+limit+unit,'Before: >='+limit+unit,'After: <'+limit+unit,'After: >='+limit+unit];
+        var chart = c3.generate({
+          bindto: id,
+          size: {
+              height: 300,
+          },
+          data: {
+        	  json: data["popdata"],
+            type : 'bar',
+            labels: {
+              format: {
+                y: d3.format('')
+              }
+            },
+            groups: {{groups|safe}},
+        	  order: 'asc'
+          },
+          axis: {
+            x: {
+              type: 'categorized',
+              categories: xAxisData,
+              label: {
+                  text: title,
+                  position: 'outer-middle'
+                }
+              },
+              y: {
+                label: {
+                  text: ' # Patients',
+                  position: 'outer-middle'
+             }
+           },rotated : true
+         }
+       });
+
+       return chart;
+      }
+      a1c_chart=generate_chart("#a1c-chart",a1cdata, "A1C", 5.7, "%");
+      bmi_chart=generate_chart("#bmi-chart",bmidata, "BMI", 25, "");
+      sbp_chart=generate_chart("#sbp-chart",sbpdata, "Systolic Blood Pressure", 120, "mm Hg");
+      dbp_chart=generate_chart("#dbp-chart",dbpdata, "Diastolic Blood Pressure", 80, "mm Hg");
+
+    {% for p_item in programs %}
+      {% for dict_item in a1c_data|to_obj %}
+        {% if p_item.program in dict_item %}
+         $("#{{p_item.program.lower()}}").click(function() {
+            {% for p_item2 in programs %}
+              {% if p_item==p_item2 %}
+                  a1c_chart.hide([{% for dict_item in a1c_data|to_obj %}{% if p_item.program not in dict_item %}'{{ dict_item }}',{% endif %}{% endfor %}]);
+                  bmi_chart.hide([{% for dict_item in bmi_data|to_obj %}{% if p_item.program not in dict_item %}'{{ dict_item }}',{% endif %}{% endfor %}]);
+                  sbp_chart.hide([{% for dict_item in sbp_data|to_obj %}{% if p_item.program not in dict_item %}'{{ dict_item }}',{% endif %}{% endfor %}]);
+                  dbp_chart.hide([{% for dict_item in dbp_data|to_obj %}{% if p_item.program not in dict_item %}'{{ dict_item }}',{% endif %}{% endfor %}]);
+                  a1c_chart.show(['{{p_item2.program}} (Completed)', '{{p_item2.program}} (Withdrawn)']);
+                  bmi_chart.show(['{{p_item2.program}} (Completed)', '{{p_item2.program}} (Withdrawn)']);
+                  sbp_chart.show(['{{p_item2.program}} (Completed)', '{{p_item2.program}} (Withdrawn)']);
+                  dbp_chart.show(['{{p_item2.program}} (Completed)', '{{p_item2.program}} (Withdrawn)']);
+              {% endif %}
+            {% endfor %}
+          });
+        {% endif %}
+      {% endfor %}
+    {% endfor %}
+
+    $("#chart_all").click(function() {
+      	a1c_chart.show(['YMCA (Completed)', 'YMCA (Withdrawn)', 'FitPlus (Completed)', 'FitPlus (Withdrawn)','HealthEdu (Completed)', 'HealthEdu (Withdrawn)',]);
+        bmi_chart.show(['YMCA (Completed)', 'YMCA (Withdrawn)', 'FitPlus (Completed)', 'FitPlus (Withdrawn)','HealthEdu (Completed)', 'HealthEdu (Withdrawn)',]);
+        sbp_chart.show(['YMCA (Completed)', 'YMCA (Withdrawn)', 'FitPlus (Completed)', 'FitPlus (Withdrawn)','HealthEdu (Completed)', 'HealthEdu (Withdrawn)',]);
+        dbp_chart.show(['YMCA (Completed)', 'YMCA (Withdrawn)', 'FitPlus (Completed)', 'FitPlus (Withdrawn)','HealthEdu (Completed)', 'HealthEdu (Withdrawn)',]);
+    });
+    </script>
+  </body>
+</html>

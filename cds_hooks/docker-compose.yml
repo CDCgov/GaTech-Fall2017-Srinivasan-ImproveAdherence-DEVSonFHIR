@@ -1,0 +1,11 @@
+# This file has been modified from the original
+
+cds_hooks_referral:
+  build: .
+  ports:
+   - "8200:8200"
+  environment:
+    BASE_URL: $BASE_URL
+    HTTP_PORT_BACKEND: 8200
+    LPHD_URL: ${BASE_URL}:5000
+  command: run-backend

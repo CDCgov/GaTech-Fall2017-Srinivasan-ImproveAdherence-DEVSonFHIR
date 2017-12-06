@@ -1,0 +1,21 @@
+{
+  "name": "mock-cds-backend",
+  "version": "0.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "restify": "^4.3.0",
+    "restify-clients": "^1.5.2",
+    "then-request": "^4.1.0",
+    "sync-request": "^4.1.0"
+  },
+  "devDependencies": {
+    "nodemon": "^1.11.0"
+  }
+}

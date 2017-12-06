@@ -1,0 +1,9 @@
+Date,condition_snomed,Program ID,Program Name,Completed,Before/After,min_age,max_age,gender,marital_status,race,A1C,BMI,Systolic BP,Diastolic BP,Blood Glucose Level
+28/10/2016,38341003,1234,WeightWatchers,TRUE,Before,20,25,M,Single,Asian,5,19,120,90,5.5
+28/4/2016,38341003,1234,WeightWatchers,TRUE,After,20,25,M,Single,Asian,4,17,110,80,5.2
+28/10/2016,38341003,1234,WeightWatchers,FALSE,Before,20,25,M,Single,Asian,5,19,120,90,5.5
+28/4/2016,38341003,1234,WeightWatchers,FALSE,After,20,25,M,Single,Asian,6,21,130,95,6
+28/10/2016,44054006,4321,StressRelievers,TRUE,Before,40,45,M,Single,Asian,5,19,120,90,5.5
+28/4/2016,44054006,4321,StressRelievers,TRUE,After,40,45,M,Single,Asian,4,17,110,80,5.2
+28/10/2016,44054006,4321,StressRelievers,FALSE,Before,40,45,M,Single,Asian,5,19,120,90,5.5
+28/4/2016,44054006,4321,StressRelievers,FALSE,After,40,45,M,Single,Asian,6,21,130,95,6

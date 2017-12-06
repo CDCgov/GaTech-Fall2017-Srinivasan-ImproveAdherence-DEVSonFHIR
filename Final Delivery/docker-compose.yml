@@ -1,0 +1,35 @@
+version: "3"
+
+services:
+  fhir_server:
+    image: meow/mock-fhir-server
+    ports:
+      - "8100:8080"
+  cdshooks_frontend:
+    image: meow/mock-cds-hooks-frontend
+    ports:
+      - "8080:8080"
+    environment:
+      HTTP_PORT_FRONTEND: 8080
+      BASE_URL: $BASE_URL
+      FHIR_URL: ${BASE_URL}:8100/hapi-fhir-jpaserver-example/baseDstu2
+      CDS_HOOKS_URL: ${BASE_URL}:8200
+      LPHD_URL: ${BASE_URL}:5000
+    command: run-frontend
+  lphd_referral_service:
+    build: ../cds_hooks
+    ports:
+     - "8200:8200"
+    environment:
+      BASE_URL: $BASE_URL
+      FHIR_URL: ${BASE_URL}:8100/hapi-fhir-jpaserver-example/baseDstu2
+      HTTP_PORT_BACKEND: 8200
+      LPHD_URL: ${BASE_URL}:5000
+  lphd_webapp:
+    build: ../
+    ports:
+      - "5000:5000"
+    environment:
+      BASE_URL: $BASE_URL
+      FHIR_URL: ${BASE_URL}:8100/hapi-fhir-jpaserver-example/baseDstu2
+
