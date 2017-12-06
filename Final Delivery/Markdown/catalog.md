@@ -9,7 +9,7 @@
 * Application: [https://github.com/CDCgov/GaTech-Fall2017-Srinivasan-ImproveAdherence-DEVSonFHIR](https://github.com/CDCgov/GaTech-Fall2017-Srinivasan-ImproveAdherence-DEVSonFHIR)
 
 #### Project Contents
-**Leverage-Population-Health-Data**
+**GaTech-Fall2017-Srinivasan-ImproveAdherence-DEVSonFHIR**
 **|- Final Delivery/**
 &nbsp;&nbsp;**|-** catalog.pdf
 &nbsp;&nbsp;**|-** Deliverable 1 Presentation.pdf
